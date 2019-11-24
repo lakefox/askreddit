@@ -114,8 +114,4 @@ function scale() {
   }
 }
 
-document.querySelector("html").addEventListener("keydown",(evt) => {
-  if (event.code == "Space") {
-    play();
-  }
-})
+setTimeout(play,10000);
