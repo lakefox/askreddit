@@ -1,3 +1,5 @@
+let amt = 87;
+
 function loadComments(id,cb) {
   var res = [];
   fetch(`https://api.pushshift.io/reddit/comment/search/?link_id=${id}&limit=20000&filter=body,parent_id,created_utc,author,score`).then((raw) => {
@@ -48,6 +50,8 @@ function loadPost(id) {
 let count = 0;
 
 function next() {
+  amt = 87;
+  document.querySelector(".a").style.top = `${amt}%`;
   if (count == 0) {
     document.querySelector(".q").style.display = "none";
     document.querySelector(".a").style.display = "block";
@@ -57,7 +61,7 @@ function next() {
   var html = converter.makeHtml(post.body);
 
   document.querySelector(".name").innerHTML = post.author + `<span id="upvotes"> ${(Math.random()*10).toString().slice(0,3)}k points · ${parseInt(Math.random()*12)} hours ago</span>`;
-  document.querySelector(".text").innerHTML = html;
+  document.querySelector(".text").innerHTML = html.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');;
   count++;
 }
 
@@ -82,7 +86,7 @@ function play() {
 }
 
 function clean(text) {
-  return text.replace(/[&\/\\#,+()$~%:*<>{}]/g, '');
+  return text.replace(/[&\/\\#,+()$~%:*<>{}_]/g, '');
 }
 function shuffle(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -93,26 +97,11 @@ function shuffle(array) {
     }
     return array;
 }
-let last = -1;
-setInterval(() => {
-  let box = document.querySelector(".a").getBoundingClientRect();
-  if (box.height > window.innerHeight) {
-    scale();
-  } else if (last != count) {
-    document.querySelector(".a").classList.remove("toobig");
-    document.querySelector(".a").style.transform = "";
-  }
-  last = count;
-},1);
 
-function scale() {
-  document.querySelector(".a").transform = "";
-  let box = document.querySelector(".a").getBoundingClientRect();
-  if (box.height > window.innerHeight) {
-    document.querySelector(".a").style.transform = `scale(${(window.innerHeight/box.height)-0.01}) translate(-50%, -50%)`;
-    document.querySelector(".a").classList.add("toobig");
-  }
-}
+setInterval(() => {
+  amt -= 1.7;
+  document.querySelector(".a").style.top = `${amt}%`;
+},2000);
 
 document.addEventListener("click", () => {
   play();

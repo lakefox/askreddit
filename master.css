@@ -64,6 +64,7 @@ a {
 }
 img#upvote {
     width: 30px;
+    height: 45px;
     margin-left: -14px;
 }
 
@@ -83,11 +84,8 @@ img#upvote {
 }
 .a {
   position: absolute;
-  top: 50%;
+  top: 87%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   display: none;
-}
-.toobig {
-  transform-origin: left top;
 }
