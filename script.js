@@ -71,7 +71,6 @@ function play() {
     window.speechSynthesis.speak(msg);
   } else if (count == parseInt(window.location.search.slice(8))) {
     console.log("done");
-    // stopCapture();
   } else {
     let msg = new SpeechSynthesisUtterance(clean(document.querySelector(".text").innerText));
     msg.onend = () => {
@@ -110,12 +109,11 @@ function scale() {
   document.querySelector(".a").transform = "";
   let box = document.querySelector(".a").getBoundingClientRect();
   if (box.height > window.innerHeight) {
-    document.querySelector(".a").style.transform = `scale(${(window.innerHeight/box.height)-0.05}) translate(-50%, -50%)`;
+    document.querySelector(".a").style.transform = `scale(${(window.innerHeight/box.height)-0.01}) translate(-50%, -50%)`;
     document.querySelector(".a").classList.add("toobig");
   }
 }
 
-document.addEventListener("click", () => {
-  // startCapture();
+document.addEventListener("click", () => {=
   play();
 });
