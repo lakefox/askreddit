@@ -114,6 +114,6 @@ function scale() {
   }
 }
 
-document.addEventListener("click", () => {=
+document.addEventListener("click", () => {
   play();
 });
