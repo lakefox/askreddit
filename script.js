@@ -83,7 +83,7 @@ function play() {
 }
 
 function clean(text) {
-  return text.replace(/[&\/\\#,+()$~%'":*<>{}]/g, '');
+  return text.replace(/[&\/\\#,+()$~%:*<>{}]/g, '');
 }
 function shuffle(array) {
     for (var i = array.length - 1; i > 0; i--) {
