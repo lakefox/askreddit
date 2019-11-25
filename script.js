@@ -149,7 +149,7 @@ async function startCapture() {
 }
 
 function stopCapture(evt) {
-  let tracksS = tracks.getTracks();m
+  let tracksS = tracks.getTracks();
 
   tracksS.forEach(track => track.stop());
 
