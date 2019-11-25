@@ -71,6 +71,7 @@ function play() {
     window.speechSynthesis.speak(msg);
   } else if (count == parseInt(window.location.search.slice(8))) {
     console.log("done");
+    stopCapture();
   } else {
     let msg = new SpeechSynthesisUtterance(clean(document.querySelector(".text").innerText));
     msg.onend = () => {
@@ -114,4 +115,56 @@ function scale() {
   }
 }
 
-setTimeout(play,10000);
+window.onload = () => {
+  startCapture();
+  setTimeout(play,10000);
+}
+
+
+
+
+// Recording
+const videoElem = document.querySelector("#video");
+
+var displayMediaOptions = {
+  video: {
+    cursor: "never"
+  },
+  audio: true
+};
+
+let blobs = [];
+let tracks;
+
+async function startCapture() {
+  try {
+    tracks = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    let stream = new MediaStream(tracks);
+    rec = new MediaRecorder(stream, {mimeType: 'video/webm; codecs=vp9,opus'});
+    rec.start();
+    rec.ondataavailable = (e) => blobs.push(e.data);
+  } catch(err) {
+    console.error("Error: " + err);
+  }
+}
+
+function stopCapture(evt) {
+  let tracksS = tracks.getTracks();
+
+  tracksS.forEach(track => track.stop());
+
+  rec.stop();
+
+  rec.onstop = async () => {
+
+    console.log("Stopped");
+    blob = new Blob(blobs, {type: 'video/webm'});
+    let url = window.URL.createObjectURL(blob);
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = encodeURIComponent(document.querySelector(".qbod").innerText);
+    a.click();
+
+  }
+
+}
