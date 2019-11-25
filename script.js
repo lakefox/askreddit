@@ -99,7 +99,7 @@ function shuffle(array) {
 }
 
 setInterval(() => {
-  amt -= 3.5;
+  amt -= 4;
   document.querySelector(".a").style.top = `${amt}%`;
 },2000);
 
