@@ -1,6 +1,6 @@
 function loadComments(id,cb) {
   var res = [];
-  fetch(`//api.pushshift.io/reddit/comment/search/?link_id=${id}&limit=20000&filter=body,parent_id,created_utc,author,score`).then((raw) => {
+  fetch(`https://api.pushshift.io/reddit/comment/search/?link_id=${id}&limit=20000&filter=body,parent_id,created_utc,author,score`).then((raw) => {
     return raw.json();
   }).then((data) => {
     var posts = data.data;
@@ -35,7 +35,7 @@ loadComments(window.location.hash.slice(1),(data) => {
 loadPost(window.location.hash.slice(1));
 
 function loadPost(id) {
-  fetch(`//api.pushshift.io/reddit/search/submission/?ids=${id}`).then((raw) => {
+  fetch(`https://api.pushshift.io/reddit/search/submission/?ids=${id}`).then((raw) => {
     return raw.json();
   }).then((data) => {
     var post = data.data[0];
