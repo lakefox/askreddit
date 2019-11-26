@@ -84,7 +84,7 @@ function next() {
   findBreaks();
   document.querySelector(".text2").style.display = "none";
 
-  currentText = document.querySelector(".text2").innerHTML.replace(/<[^>]*>?/gm, '');
+  currentText = document.querySelector(".text2").innerHTML.replace(/<[^>]*>?/gm, '').replace(/&\/?[^;]+(;|$)/g, "");
 }
 
 function play() {
@@ -147,3 +147,15 @@ function findBreaks() {
     lastTop = newTop;
   }
 }
+
+
+
+
+// NoSleep
+
+var noSleep = new NoSleep();
+
+document.addEventListener('click', function enableNoSleep() {
+  document.removeEventListener('click', enableNoSleep, false);
+  noSleep.enable();
+}, false);
