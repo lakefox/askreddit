@@ -97,9 +97,7 @@ function play() {
       setTimeout(next,1000);
       setTimeout(play,2000);
     }
-    setTimeout(() => {
-      window.speechSynthesis.speak(msg);
-    },10000);
+    window.speechSynthesis.speak(msg);
   } else if (count == parseInt(window.location.search.slice(8))) {
     console.log("done");
   } else {
