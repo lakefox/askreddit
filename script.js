@@ -1,5 +1,3 @@
-let amt = 87;
-
 function loadComments(id,cb) {
   var res = [];
   fetch(`https://api.pushshift.io/reddit/comment/search/?link_id=${id}&limit=20000&filter=body,parent_id,created_utc,author,score`).then((raw) => {
@@ -16,8 +14,10 @@ function loadComments(id,cb) {
     res.sort((f,s) => {
       return s.body.length-f.body.length;
     });
+    res = res.slice(0,parseInt(window.location.search.slice(8))*4);
+    res = shuffle(res);
     res = res.slice(0,parseInt(window.location.search.slice(8)));
-    cb(shuffle(res));
+    cb(res);
   });
 }
 function time(UNIX_timestamp){
@@ -48,26 +48,45 @@ function loadPost(id) {
 }
 
 let count = 0;
+let currentText = "";
 
 function next() {
-  amt = 87;
-  document.querySelector(".a").style.top = `${amt}%`;
+  markCount = 0;
+  document.querySelector(".a").style.top = `calc(100% - 50px)`;
   if (count == 0) {
     document.querySelector(".q").style.display = "none";
     document.querySelector(".a").style.display = "block";
   }
   let post = posts[count];
+  w = post.body.split(" ");
+  for (var i = 0; i < w.length; i++) {
+    w[i] = `<span>${w[i]}</span>`;
+  }
+  let body = w.join(" ");
   var converter = new showdown.Converter();
   var html = converter.makeHtml(post.body);
+  var html2 = converter.makeHtml(body);
 
   document.querySelector(".name").innerHTML = post.author + `<span id="upvotes"> ${(Math.random()*10).toString().slice(0,3)}k points · ${parseInt(Math.random()*12)} hours ago</span>`;
-  document.querySelector(".text").innerHTML = html.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');;
+  document.querySelector(".text2").innerHTML = html2.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+  document.querySelector(".text").innerHTML = html.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
   count++;
+  document.querySelector(".text2").style.display = "block";
+  findBreaks();
+  document.querySelector(".text2").style.display = "none";
+
+  currentText = document.querySelector(".text2").innerHTML.replace(/<mark>/g, "yymarkyy").replace(/<[^>]*>?/gm, '').replace(/yymarkyy/g, "<mark>");
+
 }
+
+let markCount = 0;
 
 function play() {
   if (count == 0) {
     var msg = new SpeechSynthesisUtterance(clean(document.querySelector(".qbod").innerText));
+    msg.onerror = (e) => {
+      console.log(e);
+    }
     msg.onend = () => {
       setTimeout(next,1000);
       setTimeout(play,2000);
@@ -76,7 +95,7 @@ function play() {
   } else if (count == parseInt(window.location.search.slice(8))) {
     console.log("done");
   } else {
-    let msg = new SpeechSynthesisUtterance(clean(document.querySelector(".text").innerText));
+    let msg = new SpeechSynthesisUtterance(clean(currentText));
     msg.onend = () => {
       setTimeout(next,1000);
       setTimeout(play,2000);
@@ -99,10 +118,24 @@ function shuffle(array) {
 }
 
 setInterval(() => {
-  amt -= 4;
-  document.querySelector(".a").style.top = `${amt}%`;
+  window.scrollBy(0,tops[markCount+1]-tops[markCount]);
+  markCount++;
 },2000);
 
 document.addEventListener("click", () => {
   play();
 });
+
+let tops = [];
+
+function findBreaks() {
+  var words = document.querySelectorAll('.text2 span');
+  var lastTop = 0;
+  for (var i=0; i<words.length; i++) {
+    var newTop = words[i].getBoundingClientRect().top;
+    if (newTop == lastTop) continue;
+    tops.push(newTop);
+    words[i].insertAdjacentHTML("beforebegin","<mark>");
+    lastTop = newTop;
+  }
+}
