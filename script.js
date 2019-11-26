@@ -132,11 +132,11 @@ function shuffle(array) {
     return array;
 }
 
-document.addEventListener("click", () => {
-  setTimeout(() => {
-    play();
-  },10000);
-});
+// document.addEventListener("click", () => {
+//   setTimeout(() => {
+//     play();
+//   },10000);
+// });
 
 let tops = [];
 
