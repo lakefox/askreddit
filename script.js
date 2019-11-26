@@ -145,15 +145,3 @@ function findBreaks() {
     lastTop = newTop;
   }
 }
-
-
-
-
-// NoSleep
-
-var noSleep = new NoSleep();
-
-document.addEventListener('click', function enableNoSleep() {
-  document.removeEventListener('click', enableNoSleep, false);
-  noSleep.enable();
-}, false);
