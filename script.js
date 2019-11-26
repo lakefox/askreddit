@@ -14,7 +14,7 @@ function loadComments(id,cb) {
     res.sort((f,s) => {
       return s.body.length-f.body.length;
     });
-    res = res.slice(0,parseInt(window.location.search.slice(8))*4);
+    res = res.slice(0,parseInt(window.location.search.slice(8))*10);
     res = shuffle(res);
     res = res.slice(0,parseInt(window.location.search.slice(8)));
     cb(res);
@@ -44,6 +44,14 @@ function loadPost(id) {
     console.log(post);
     document.querySelector(".qbod").innerHTML = post.title;
     document.querySelector("#auth").innerHTML = post.author;
+
+    // ThumbNail
+
+    fetch(`http://www.splashbase.co/api/v1/images/search?query=${encodeURIComponent(post.title)}`).then((raw) => {
+      return raw.json();
+    }).then((data) => {
+      document.querySelector("body").style.backgroundImage = `url("${shuffle(data.images)[0].url}")`;
+    })
   });
 }
 
@@ -51,8 +59,9 @@ let count = 0;
 let currentText = "";
 
 function next() {
-  markCount = 0;
+  document.querySelector("body").style.backgroundImage = ``;
   document.querySelector(".a").style.top = `calc(100% - 50px)`;
+  window.scrollTo(0,0);
   if (count == 0) {
     document.querySelector(".q").style.display = "none";
     document.querySelector(".a").style.display = "block";
@@ -75,11 +84,8 @@ function next() {
   findBreaks();
   document.querySelector(".text2").style.display = "none";
 
-  currentText = document.querySelector(".text2").innerHTML.replace(/<mark>/g, "yymarkyy").replace(/<[^>]*>?/gm, '').replace(/yymarkyy/g, "<mark>");
-
+  currentText = document.querySelector(".text2").innerHTML.replace(/<[^>]*>?/gm, '');
 }
-
-let markCount = 0;
 
 function play() {
   if (count == 0) {
@@ -96,6 +102,15 @@ function play() {
     console.log("done");
   } else {
     let msg = new SpeechSynthesisUtterance(clean(currentText));
+    msg.onboundary = (e) => {
+      let wordIndex = document.querySelector(".text2").innerText.slice(0,e.charIndex).split(" ").length;
+      if (tops[1]) {
+        if (wordIndex >= tops[0][1]) {
+          window.scrollBy(0,tops[1][0]-tops[0][0]);
+          tops.shift();
+        }
+      }
+    }
     msg.onend = () => {
       setTimeout(next,1000);
       setTimeout(play,2000);
@@ -117,25 +132,22 @@ function shuffle(array) {
     return array;
 }
 
-setInterval(() => {
-  window.scrollBy(0,tops[markCount+1]-tops[markCount]);
-  markCount++;
-},2000);
-
 document.addEventListener("click", () => {
-  play();
+  setTimeout(() => {
+    play();
+  },10000);
 });
 
 let tops = [];
 
 function findBreaks() {
+  tops = [];
   var words = document.querySelectorAll('.text2 span');
   var lastTop = 0;
   for (var i=0; i<words.length; i++) {
     var newTop = words[i].getBoundingClientRect().top;
     if (newTop == lastTop) continue;
-    tops.push(newTop);
-    words[i].insertAdjacentHTML("beforebegin","<mark>");
+    tops.push([newTop,i]);
     lastTop = newTop;
   }
 }
