@@ -89,8 +89,6 @@ function next() {
 
 function play() {
   if (count == 0) {
-    document.querySelector("audio").play();
-    document.querySelector("audio").volume = "0.3";
     var msg = new SpeechSynthesisUtterance(clean(document.querySelector(".qbod").innerText));
     msg.onerror = (e) => {
       console.log(e);
