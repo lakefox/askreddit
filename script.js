@@ -1,4 +1,3 @@
-document.querySelector("audio").volume = "0.3";
 function loadComments(id,cb) {
   var res = [];
   fetch(`https://api.pushshift.io/reddit/comment/search/?link_id=${id}&limit=20000&filter=body,parent_id,created_utc,author,score`).then((raw) => {
@@ -88,13 +87,10 @@ function next() {
   currentText = document.querySelector(".text2").innerHTML.replace(/<[^>]*>?/gm, '').replace(/&\/?[^;]+(;|$)/g, "");
 }
 
-function start() {
-  document.querySelector("audio").play();
-  play();
-}
-
 function play() {
   if (count == 0) {
+    document.querySelector("audio").play();
+    document.querySelector("audio").volume = "0.3";
     var msg = new SpeechSynthesisUtterance(clean(document.querySelector(".qbod").innerText));
     msg.onerror = (e) => {
       console.log(e);
