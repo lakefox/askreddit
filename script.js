@@ -89,10 +89,8 @@ function next() {
 }
 
 function start() {
-  setTimeout(() => {
-    document.querySelector("audio").play();
-    play();
-  },3000);
+  document.querySelector("audio").play();
+  play();
 }
 
 function play() {
