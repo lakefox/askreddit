@@ -88,7 +88,7 @@ function next() {
   currentText = document.querySelector(".text2").innerHTML.replace(/<[^>]*>?/gm, '').replace(/&\/?[^;]+(;|$)/g, "");
 }
 
-function start() {=
+function start() {
   setTimeout(() => {
     document.querySelector("audio").play();
     play();
