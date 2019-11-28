@@ -84,7 +84,7 @@ function next() {
   findBreaks();
   document.querySelector(".text2").style.display = "none";
 
-  currentText = document.querySelector(".text2").innerText.replace(/[^\w\s]/gi, '');
+  currentText = document.querySelector(".text2").innerText;
 }
 
 function play() {
