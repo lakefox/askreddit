@@ -78,13 +78,13 @@ function next() {
 
   document.querySelector(".name").innerHTML = post.author + `<span id="upvotes"> ${(Math.random()*10).toString().slice(0,3)}k points · ${parseInt(Math.random()*12)} hours ago</span>`;
   document.querySelector(".text2").innerHTML = html2.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
-  document.querySelector(".text").innerHTML = html.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+  document.querySelector(".text").innerHTML = html;
   count++;
   document.querySelector(".text2").style.display = "block";
   findBreaks();
   document.querySelector(".text2").style.display = "none";
 
-  currentText = document.querySelector(".text2").innerHTML.replace(/<[^>]*>?/gm, '').replace(/&\/?[^;]+(;|$)/g, "");
+  currentText = document.querySelector(".text2").innerText.replace(/[^\w\s]/gi, '');
 }
 
 function play() {
