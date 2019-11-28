@@ -102,11 +102,13 @@ function play() {
     console.log("done");
   } else {
     let msg = new SpeechSynthesisUtterance(clean(currentText));
+    document.querySelector(".a").style.top = "calc(100% - 50px)";
     msg.onboundary = (e) => {
       let wordIndex = document.querySelector(".text2").innerText.slice(0,e.charIndex).split(" ").length;
       if (tops[1]) {
         if (wordIndex >= tops[0][1]) {
-          window.scrollBy(0,tops[1][0]-tops[0][0]);
+          let topPos = document.querySelector(".a").getBoundingClientRect().y;
+          document.querySelector(".a").style.top = topPos-(tops[1][0]-tops[0][0])+"px";
           tops.shift();
         }
       }
